@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<odoo>
+
+
+    <template id="report_leave_request_custom_value">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" style="font-size:13px">
+                    <br/>
+                    <div class="text-center" style="border-bottom:1pt solid black;">
+                        <h5 class="text-center" style="font-weight:bold;text-align:center">LEAVE REQUEST</h5>
+                    </div>
+                    <div class="row mt32 mb32">
+                    </div>
+
+
+                    <table class="table table-bordered" >
+
+                        <h5><b>Employee Details</b></h5>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Employee Name</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.name"/></td>
+                        </tr>
+                        <tr>
+
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Employee ID</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.emp_id"/></td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Department</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.department_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Designation</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.job_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Qatar ID Expiry</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.qatar_id_expiry"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Passport Expiry</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.passport_expiry"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><strong>Joining Date</strong></td>
+                            <td colspan="3" style="border:1pt solid black;padding:6px"><div t-field="doc.employee_id.joining_date"/></td>
+                        </tr>
+
+
+                     </table>
+
+                    <table class="table table-bordered">
+                        <h5><b>Leave Details</b></h5>
+                        <tr>
+                            <td style="border:1pt solid black;padding:6px"><strong>Leave Type</strong></td>
+                            <td style="border:1pt solid black;padding:6px"><div t-field="doc.holiday_status_id.name"/></td>
+                            <td style="border:1pt solid black;padding:6px"><strong>Duration</strong></td>
+                            <td style="border:1pt solid black;padding:6px"><div t-field="doc.number_of_days_display"/></td>
+                        </tr>
+                        <tr>
+                            <td style="border:1pt solid black;padding:6px"><strong>From</strong></td>
+                            <td style="border:1pt solid black;padding:6px"><div t-field="doc.request_date_from"/></td>
+                            <td style="border:1pt solid black;padding:6px"><Strong>To</Strong></td>
+                            <td style="border:1pt solid black;padding:6px"><div t-field="doc.request_date_to"/></td>
+                        </tr>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr height="100">
+                            <td style="border:1pt solid black;padding:6px"><strong>Comment by Manager</strong><br/><br/><div t-field="doc.report_note"/></td>
+                        </tr>
+
+                    </table>
+
+                     <br/><br/><br/><br/><br/><br/>
+
+                    <div style="padding-top:25px;display:inline-block;width:100%;clear: both;">
+                        <div style="display:inline-block;float:left">
+                          <hr style="border: 1px solid black;" width="120px"/>
+                          <p><strong>Signature of Manager</strong></p>
+                        </div>
+                        <div style="display:inline-block;float:right">
+                          <hr style="border: 1px solid black;" width="120px"/>
+                          <p><strong>Signature of Employee</strong></p>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </t>
+    </t>
+    </template>
+
+
+<template id="report_leave_request_custom">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="partition_leave.report_leave_request_custom_value"/>
+        </t>
+    </t>
+</template>
+</odoo>

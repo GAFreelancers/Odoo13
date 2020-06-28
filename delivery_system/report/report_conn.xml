@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
+
+    <!--Report for Leave request -->
+    <report id="report_leave_request_connection"
+            string="Leave Request Report"
+            model="hr.leave"
+            report_type="qweb-pdf"
+            file="partition_leave.report_leave_request_custom"
+            name="partition_leave.report_leave_request_custom"
+            print_report_name="'Print Leave Report'"
+            menu="True" />
+
+</odoo>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="action_delivery_form" model="ir.actions.act_window">
+        	<field name="name">Delivery Request</field>
+        	<field name="res_model">delivery.new</field>
+        	<field name="view_mode">tree,form,kanban,graph</field>
+        	<field name="domain">[]</field>
+        	<field name="help" type="html">
+            	<p class="oe_view_nocontent_create">Oops! no records are there..
+            	</p>
+        	</field>
+		</record>
+
+		<menuitem id="menu_delivery"
+				      name="Delivery"
+			          sequence="23"/>
+		<menuitem id="menu_delivery_req"
+				      parent="menu_delivery"
+				      name="Delivery Request"
+			          action="action_delivery_form"
+			          sequence="7"/>
+
+	    <record id="new_delivery_form11" model="ir.ui.view">
+            <field name="name">delivery.Form</field>
+            <field name="model">delivery.new</field>
+	        <field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="action_confirm" string="Confirm" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight"/>
+						<button name="action_prepare" string="Prepare" type="object" attrs="{'invisible': [('state', '!=', 'confirm')]}" class="oe_highlight"/>
+						<button name="action_bill" string="Make Bill" type="object" attrs="{'invisible': [('state', '!=', 'packing')]}" class="oe_highlight"/>
+						<button name="action_enroute" string="Enroute" type="object" attrs="{'invisible': [('state', '!=', 'billed')]}" class="oe_highlight"/>
+						<button name="action_delivered" string="Delivery Complete" type="object" attrs="{'invisible': [('state', '!=', 'enroute')]}" class="oe_highlight"/>
+						<button name="action_done" string="Done" type="object" attrs="{'invisible': [('state', '!=', 'delivered')]}" class="oe_highlight"/>
+						<button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', '=', 'draft'),('state', '=', 'done'),('state', '=', 'cancel')]}"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,packing,billed,enroute,delivered,done"/>
+					</header>
+					<sheet>
+						<div class="oe_title">
+							<group>
+								<group>
+									<h2>
+										<field name="name" required="True" />
+									</h2>
+								</group>
+								<group>
+									<field name="customer_img" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}"/>
+								</group>
+							</group>
+
+					</div>
+
+	                 <group>
+                        <group>
+                            <field name="customer_id" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}"/>
+
+							<lable><b>Address</b></lable>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street" />
+                                <field name="city" placeholder="City" class="o_address_city" />
+                                <field name="state_id" class="o_address_state" placeholder="State"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="country_id" placeholder="Country" class="o_address_country"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="ordered_on" force_save="1" />
+                            <field name="confirmed_on" force_save="1" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                            <field name="packed_on" force_save="1" attrs="{'invisible': [('state','=','draft'),('state','=','confirm')]}"/>
+                            <field name="billed_on" force_save="1" attrs="{'invisible': [('state','=','draft'),('state','=','confirm'),('state','=','packing')]}"/>
+                            <field name="enroute_on" force_save="1" attrs="{'invisible': [('state','=','draft'),('state','=','confirm'),('state','=','packing'),('state','=','billed')]}"/>
+                            <field name="cancelled_on" force_save="1" attrs="{'invisible': [('state','!=','cancel')]}"/>
+                            <field name="delivered_on" force_save="1" attrs="{'invisible': [('state','!=','done'),('state','!=','delivered')]}"/>
+                            <field name="completed_on" force_save="1" attrs="{'invisible': [('state','!=','done')]}"/>
+                            <field name="phone" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}"/>
+                            <field name="another_address" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}"/>
+							<lable attrs="{'invisible': [('another_address', '!=', True)]}"><b>Delivery Address</b></lable>
+                            <div class="o_address_format">
+                                <field name="street1" placeholder="Street..." class="o_address_street" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                                <field name="street12" placeholder="Street 2..." class="o_address_street" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                                <field name="city1" placeholder="City" class="o_address_city" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                                <field name="state_id1" class="o_address_state" placeholder="State" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                                <field name="zip1" placeholder="ZIP" class="o_address_zip" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                                <field name="country_id1" placeholder="Country" class="o_address_country" attrs="{'invisible': [('another_address', '!=', True)]}"/>
+                            </div>
+                            <field name="total" invisible="1" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}"/>
+                        </group>
+                    </group>
+
+
+						<notebook>
+							<page string="Order Details">
+
+							<field name="order_line" attrs="{'readonly': [('state','=','done'),('state','=','cancel'),('state','=','billed')]}">
+							 <tree string="Items" editable="bottom" options="{'no_open':True,'no_create': True}" >
+							 	<field name="product_id" />
+							 	<field name="name"/>
+							 	<field name="quantity"/>
+							 	<field name="price_unit"/>
+							 	<field name="price_subtotal"/>
+                            </tree>
+						</field>
+                        	</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+	    </record>
+
+
+		<record id="delivery_kanban" model="ir.ui.view">
+   			<field name="name">delivery.kanban.view</field>
+   			<field name="model">delivery.new</field>
+   			<field name="arch" type="xml">
+  			<kanban default_group_by="state" class="o_kanban_small_column o_kanban_project_state" group_delete="false">
+           		<field name="id"/>
+				<field name="state" options='{"group_by_tooltip": {"requirments": "Description", "legend_priority": "Use of stars"}}'/>
+                <field name="kanbancolor"/>
+           		<field name="name"/>
+           		<field name="customer_id"/>
+           		<field name="street"/>
+           		<field name="street2"/>
+           		<field name="customer_img" widget="image"/>
+           		<templates>
+               	<t t-name="kanban-box">
+					<div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.kanbancolor.raw_value)} oe_kanban_card oe_kanban_global_click">
+                    	   <div class="o_kanban_image">
+								<img alt="Avatar" t-att-src="kanban_image('delivery.new', 'image_medium',record.id.customer_img)"/>
+						   </div>
+                       		<div class="oe_kanban_details">
+                           		<t class="o_kanban_record_title">
+                               	<strong t-esc="record.name.value"/>
+                           		</t>
+                           		<div t-if="record.customer_id.value">
+                               	<t t-esc="record.customer_id.value"/>
+                           		</div>
+                           		<div t-if="record.street.value">
+                               	<t t-esc="record.street.value"/>
+                           		</div>
+                           		<div t-if="record.street2.value">
+                               	<t t-esc="record.street2.value"/>
+                           		</div>
+                       </div>
+                   </div>
+               	</t>
+           		</templates>
+       		</kanban>
+   			</field>
+		</record>
+
+
+
+	    <record id="delivery_tree_view" model="ir.ui.view">
+			<field name="name">delivery.tree</field>
+			<field name="model">delivery.new</field>
+			<field name="arch" type="xml">
+				<tree decoration-muted="state == 'delivered'" decoration-success="state == 'done'" decoration-danger="state == 'cancel'" decoration-info="state == 'enroute'">
+					<field name="name"/>
+					<field name="customer_id"/>
+					<field name="total"/>
+					<field name="state"/>
+				</tree>
+			</field>
+	    </record>
+
+ 	    <record id="new_delivery_graph" model="ir.ui.view">
+            <field name="name">delivery.new.graph</field>
+            <field name="model">delivery.new</field>
+	        <field name="arch" type="xml">
+				<graph string="Delivery Graph">
+					<field name="customer_id"/>
+					<field name="total" type="measure"/>
+				</graph>
+			</field>
+	    </record>
+
+
+	</data>
+
+</odoo>
